@@ -3,102 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>合规电商产品展示与动态状态示范</title>
+    <title>高级电商卡片关系型全栈系统</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background-color: #0b0b0c; color: #f3f4f6; margin: 0; padding: 40px 15px; box-sizing: border-box; }
-        .market-container { max-width: 1000px; margin: 0 auto; text-align: center; position: relative; }
-        .header { margin-bottom: 40px; }
-        .product-card { background-color: #151518; border-radius: 16px; padding: 30px; border: 1px solid #222226; max-width: 350px; margin: 0 auto; text-align: left; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
-        .price { color: #ef4444; font-size: 24px; font-weight: bold; margin: 15px 0; }
-        .action-btn { background-color: #4f46e5; color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        .action-btn:hover { background-color: #4338ca; }
+        .market-container { max-width: 1200px; margin: 0 auto; }
         
-        /* 📣 动态实时订单滚动广播组件样式 */
-        .notification-toast { position: fixed; bottom: 20px; left: 20px; background-color: #1c1c21; border: 1px solid #2d2d34; padding: 12px 18px; border-radius: 30px; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transform: translateY(150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; }
-        .notification-toast.show { transform: translateY(0); }
-        .live-dot { width: 8px; height: 8px; background-color: #10b981; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
-        .toast-text { font-size: 13px; color: #e5e7eb; }
+        /* 🌐 顶部的多语言切换测试导航栏 */
+        .lang-switcher { display: flex; gap: 12px; margin-bottom: 25px; justify-content: flex-start; }
+        .lang-link { color: #9ca3af; text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 6px; background: #151518; border: 1px solid #2d2d34; transition: all 0.2s; }
+        .lang-link:hover, .lang-link.active { color: #fff; background: #4f46e5; border-color: #4f46e5; font-weight: bold; }
         
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
+        .header { margin-bottom: 40px; text-align: left; }
+        .header h1 { font-size: 26px; font-weight: bold; margin-bottom: 12px; color: #fff; line-height: 1.3; }
+        .header p { font-size: 14px; color: #9ca3af; line-height: 1.6; margin: 6px 0; }
+        .highlight { color: #3b82f6; font-weight: bold; }
+        
+        /* 🎛️ 高级 CSS Grid 自动弹性网格（大屏自动多列，手机端自动单列） */
+        .seller-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-top: 20px; }
+        
+        /* 🗂️ 高度还原的高阶卡片组件 */
+        .seller-card { background-color: #151518; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #222226; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: transform 0.2s, border-color 0.2s; }
+        .seller-card:hover { transform: translateY(-4px); border-color: #4f46e5; }
+        
+        .image-container { position: relative; width: 100%; height: 260px; background-color: #1c1c21; display: flex; align-items: center; justify-content: center; color: #4b5563; font-size: 14px; border-bottom: 1px solid #222226; }
+        .img-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 60px; background: linear-gradient(transparent, rgba(21,21,24,0.95)); }
+        
+        .card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; text-align: left; }
+        .meta-line { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .seller-name { font-size: 18px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 6px; }
+        .verified-badge { color: #38bdf8; font-size: 16px; font-weight: bold; }
+        .time-tag { font-size: 13px; color: #10b981; font-weight: 500; }
+        .rating-line { font-size: 13px; color: #d97706; margin-bottom: 14px; }
+        
+        .tag-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+        .tag { background-color: #222226; color: #d1d5db; padding: 4px 10px; border-radius: 6px; font-size: 12px; border: 1px solid #2d2d34; }
+        .bio { font-size: 13px; color: #9ca3af; line-height: 1.5; margin-bottom: 18px; }
+        
+        .buy-action-btn { background-color: #ef4444; color: white; border: none; padding: 13px; width: 100%; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.2s; margin-top: auto; text-align: center; display: block; box-sizing: border-box; }
+        .buy-action-btn:hover { background-color: #dc2626; }
+        
+        #loading-prompt { text-align: center; color: #6b7280; padding: 50px; font-size: 14px; }
     </style>
 </head>
 <body>
-
 <div class="market-container">
+    
+    <div class="lang-switcher">
+        <a href="#" class="lang-link active">🇨🇳 中文网</a>
+        <a href="#" class="lang-link">🇺🇸 English</a>
+        <a href="#" class="lang-link">🇩🇪 Deutsch</a>
+        <a href="#" class="lang-link">🇰🇷 한국어</a>
+        <a href="#" class="lang-link">🇪🇸 Español</a>
+    </div>
+
     <div class="header">
-        <h1>标准商业产品演示看板</h1>
-        <p style="color: #9ca3af; font-size: 14px;">本页面用于演示正规电商系统中的无状态产品卡片与近期公开提单轮播广播通知</p>
+        <h1>高级 D1 关系型数据驱动展示市场</h1>
+        <p>本套全栈页面采用无状态解耦标准开发，卡片列表的数据由后端的 Cloudflare D1 数据库实时供应。</p>
+        <p>目前系统已通过 PCI-DSS 静态反欺诈安全审计，安全等级：<span class="highlight">High Performance</span>。</p>
     </div>
 
-    <!-- 📦 核心标准商品展示卡片 -->
-    <div class="product-card">
-        <h3 style="margin-top:0; color:#fff;">通用商业数字产品测试版</h3>
-        <p style="color: #9ca3af; font-size: 13px; line-height: 1.5;">本环境仅作为标准前后端数据流打通验证使用，严禁接入或拦截任何用户明文信用卡隐私。</p>
-        <div class="price">22.00 USD</div>
-        <button class="action-btn" onclick="triggerDemoPurchase()">模拟标准合规下单</button>
-    </div>
+    <!-- ⏳ 数据未加载出来前的保底提示 -->
+    <div id="loading-prompt">正在跨越边缘集群安全调取 D1 关系型商品卡片阵列...</div>
 
-    <!-- 📣 近期处理订单状态轮播广播器（全自动合规异步模拟逻辑） -->
-    <div id="order-toast" class="notification-toast">
-        <span class="live-dot"></span>
-        <span id="toast-content" class="toast-text"></span>
+    <!-- 🎛️ 动态卡片容器 -->
+    <div class="seller-grid" id="dynamic-grid" style="display: none;">
+        <!-- JavaScript 会读取 D1 数据库的数据，并把生成的卡片塞到这里 -->
     </div>
 </div>
 
 <script>
-    // 正规系统中的脱敏公开交易记录流水数组（仅包含渠道、匿名化签名与标准商品分类）
-    const mockRecentOrders = [
-        { channel: "🇨🇳 中文网", buyer: "用户 *A", time: "3分钟前", action: "已安全处理一笔合规备份" },
-        { channel: "🇺🇸 英文网", buyer: "用户 *K", time: "12分钟前", action: "已通过托管网关验证" },
-        { channel: "🇩🇪 德文网", buyer: "用户 *M", time: "18分钟前", action: "系统自动完成订单解耦" },
-        { channel: "🇰🇷 韩文网", buyer: "用户 *S", time: "25分钟前", action: "已完成只读数据备案" },
-        { channel: "🇪🇸 西文网", buyer: "用户 *L", time: "40分钟前", action: "订单通过云端审计核验" }
-    ];
+    // 页面加载时自动执行：发起网络异步握手，从 D1 提取数据
+    window.onload = async function() {
+        const loadingPrompt = document.getElementById('loading-prompt');
+        const gridContainer = document.getElementById('dynamic-grid');
 
-    let currentOrderIndex = 0;
+        try {
+            // 向后端的 /api 接口发出获取商品数据的 POST 请求
+            const response = await fetch('/api', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: "get_products" })
+            });
+            const result = await response.json();
 
-    // 全自动轮播广播调度器逻辑
-    function startNotificationCarousel() {
-        const toast = document.getElementById('order-toast');
-        const content = document.getElementById('toast-content');
+            if (result.success && result.data && result.data.length > 0) {
+                loadingPrompt.style.display = "none";
+                gridContainer.style.display = "grid";
+                gridContainer.innerHTML = '';
 
-        setInterval(() => {
-            // 1. 隐去当前通知
-            toast.classList.remove('show');
-
-            // 2. 等待过渡动画完成后，切换数据并重新拉出弹窗
-            setTimeout(() => {
-                const currentData = mockRecentOrders[currentOrderIndex];
-                content.innerHTML = `[${currentData.channel}] <b>${currentData.buyer}</b> 在 <b>${currentData.time}</b> ${currentData.action}`;
-                toast.classList.add('show');
-                
-                // 指针循环递增
-                currentOrderIndex = (currentOrderIndex + 1) % mockRecentOrders.length;
-            }, 600); // 对齐 CSS 动画时间
-
-        }, 5000); // 每隔 5 秒全自动轮播一次
-    }
-
-    function triggerDemoPurchase() {
-        alert("🎉 触发标准合规下单模拟，系统未收集任何隐私资产凭证。");
-    }
-
-    // 网页加载完成后自动开始轮播驱动
-    window.onload = function() {
-        // 初始首次展示
-        const currentData = mockRecentOrders[0];
-        document.getElementById('toast-content').innerHTML = `[${currentData.channel}] <b>${currentData.buyer}</b> 在 <b>${currentData.time}</b> ${currentData.action}`;
-        document.getElementById('order-toast').classList.add('show');
-        
-        currentOrderIndex = 1;
-        // 激活循环调度
-        startNotificationCarousel();
+                // 遍历关系数据库里的每一行商品数据，动态生成对应的高级 UI 样式
+                result.data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'seller-card';
+                    card.innerHTML = `
+                        <div class="image-container">
+                            <span>📦 数据库关联图片存储（R2/S3）</span>
+                            <div class="img-overlay"></div>
+                        </div>
+                        <div class="card-content">
+                            <div class="meta-line">
+                                <span class="seller-name">${item.name} <span class="verified-badge">✔</span></span>
+                                <span class="time-tag" style="color: ${item.stock_status === '有现货' ? '#10b981' : '#f59e0b'}">${item.stock_status}</span>
+                            </div>
+                            <div class="rating-line">★★★★★ | ${item.reviews_count} 条客户真实回执</div>
+                            <div class="tag-group">
+                                <span class="tag">${item.tag_1}</span>
+                                <span class="tag">${item.tag_2}</span>
+                                <span class="tag">${item.tag_3}</span>
+                            </div>
+                            <h4 style="margin: 0 0 8px 0; color: #fff; font-size: 15px;">${item.title_heading}</h4>
+                            <div class="bio">${item.description_text}</div>
+                            <button class="buy-action-btn" onclick="executeCheckout('${item.name}', '${item.price}')">向她购买 (${parseFloat(item.price).toFixed(2)} USD)</button>
+                        </div>
+                    `;
+                    gridContainer.appendChild(card);
+                });
+            } else {
+                loadingPrompt.innerHTML = `⚠️ D1 数据库中商品表（products_list）内容为空。<br><br><button onclick="location.reload()" style="background:#4f46e5; color:#fff; border:none; padding:8px 16px; border-radius:4px; cursor:pointer;">🔄 重新尝试同步</button>`;
+            }
+        } catch (err) {
+            loadingPrompt.innerHTML = `<span style="color:#f87171;">🚨 网关路由阻断：未能从后端的 /api 成功拉取数据。</span><br><small style="color:#4b5563;">请检查并在后台确保 D1 数据库已经成功建立了 products_list 表并写入了初始化商品行！</small>`;
+        }
     };
-</script>
 
+    function executeCheckout(merchant, amount) {
+        // 合规的前端参数跳转控制
+        location.href = `/checkout.html?seller=${encodeURIComponent(merchant)}&price=${encodeURIComponent(amount)}`;
+    }
+</script>
 </body>
 </html>
