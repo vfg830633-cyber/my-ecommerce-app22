@@ -3,184 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>边缘全栈关系型 SQL 验证系统</title>
+    <title>合规电商产品展示与动态状态示范</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background-color: #0b0b0c; color: #f3f4f6; padding: 30px 15px; margin: 0; }
-        .view-section { max-width: 1000px; margin: 0 auto; display: none; background: #151518; padding: 25px; border-radius: 12px; border: 1px solid #2d2d34; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .active-view { display: block; }
-        .grid { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-        .card { background-color: #0b0b0c; border-radius: 8px; padding: 20px; width: 260px; border: 1px solid #222226; }
-        .price { color: #ef4444; font-size: 22px; font-weight: bold; margin: 10px 0; }
-        .btn { background-color: #4f46e5; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; transition: background 0.2s; }
-        .btn:hover { background-color: #4338ca; }
-        .btn-success { background-color: #10b981; }
-        .btn-success:hover { background-color: #059669; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #2d2d34; background: #0b0b0c; color: #fff; border-radius: 6px; box-sizing: border-box; margin: 8px 0 15px 0; outline: none; }
-        input:focus, select:focus { border-color: #4f46e5; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; border-bottom: 1px solid #2d2d34; text-align: left; font-size: 14px; }
-        th { background: #0b0b0c; color: #9ca3af; font-size: 12px; text-transform: uppercase; }
-        #status-bar { padding: 12px; border-radius: 6px; margin: 15px 0; font-size: 13px; display: none; line-height: 1.5; }
-        .info { background: rgba(56,189,248,0.1); color: #38bdf8; border: 1px solid rgba(56,189,248,0.2); }
-        .error { background: rgba(220,38,38,0.1); color: #f87171; border: 1px solid rgba(220,38,38,0.2); }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background-color: #0b0b0c; color: #f3f4f6; margin: 0; padding: 40px 15px; box-sizing: border-box; }
+        .market-container { max-width: 1000px; margin: 0 auto; text-align: center; position: relative; }
+        .header { margin-bottom: 40px; }
+        .product-card { background-color: #151518; border-radius: 16px; padding: 30px; border: 1px solid #222226; max-width: 350px; margin: 0 auto; text-align: left; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .price { color: #ef4444; font-size: 24px; font-weight: bold; margin: 15px 0; }
+        .action-btn { background-color: #4f46e5; color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .action-btn:hover { background-color: #4338ca; }
+        
+        /* 📣 动态实时订单滚动广播组件样式 */
+        .notification-toast { position: fixed; bottom: 20px; left: 20px; background-color: #1c1c21; border: 1px solid #2d2d34; padding: 12px 18px; border-radius: 30px; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transform: translateY(150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; }
+        .notification-toast.show { transform: translateY(0); }
+        .live-dot { width: 8px; height: 8px; background-color: #10b981; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        .toast-text { font-size: 13px; color: #e5e7eb; }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 🛒 视图一：商品展示市场 -->
-    <div id="view-market" class="view-section active-view">
-        <h2 style="text-align: center; margin-top: 0; color: #fff;">Cloudflare Edge 全栈 SQL 示范市场</h2>
-        <p style="text-align: center; color: #9ca3af; font-size: 13px;">本测试环境符合 PCI-DSS 数据安全规范，严禁且不支持输入任何明文金融隐私。</p>
-        <div class="grid">
-            <div class="card">
-                <h3>高级数据验证版 Alpha</h3>
-                <div class="price">22.00 USD</div>
-                <button class="btn" onclick="openCheckout('商户Alpha', '22.00')">立即结算</button>
-            </div>
-            <div class="card">
-                <h3>高性能边缘存储版 Beta</h3>
-                <div class="price">25.00 USD</div>
-                <button class="btn" onclick="openCheckout('商户Beta', '25.00')">立即结算</button>
-            </div>
-        </div>
-        <div style="text-align: center; margin-top: 30px;">
-            <button class="btn" style="background:#222; width:auto; border:1px solid #333;" onclick="switchView('view-admin')">⚙️ 进入中央 SQL 仪表盘</button>
-        </div>
+<div class="market-container">
+    <div class="header">
+        <h1>标准商业产品演示看板</h1>
+        <p style="color: #9ca3af; font-size: 14px;">本页面用于演示正规电商系统中的无状态产品卡片与近期公开提单轮播广播通知</p>
     </div>
 
-    <!-- 💳 视图二：合规订单确认收银台 -->
-    <div id="view-checkout" class="view-section">
-        <h3 id="checkout-title" style="color: #fff; margin-top:0;">独立收银结算端</h3>
-        <div class="price" id="checkout-price">0.00 USD</div>
+    <!-- 📦 核心标准商品展示卡片 -->
+    <div class="product-card">
+        <h3 style="margin-top:0; color:#fff;">通用商业数字产品测试版</h3>
+        <p style="color: #9ca3af; font-size: 13px; line-height: 1.5;">本环境仅作为标准前后端数据流打通验证使用，严禁接入或拦截任何用户明文信用卡隐私。</p>
+        <div class="price">22.00 USD</div>
+        <button class="action-btn" onclick="triggerDemoPurchase()">模拟标准合规下单</button>
+    </div>
+
+    <!-- 📣 近期处理订单状态轮播广播器（全自动合规异步模拟逻辑） -->
+    <div id="order-toast" class="notification-toast">
+        <span class="live-dot"></span>
+        <span id="toast-content" class="toast-text"></span>
+    </div>
+</div>
+
+<script>
+    // 正规系统中的脱敏公开交易记录流水数组（仅包含渠道、匿名化签名与标准商品分类）
+    const mockRecentOrders = [
+        { channel: "🇨🇳 中文网", buyer: "用户 *A", time: "3分钟前", action: "已安全处理一笔合规备份" },
+        { channel: "🇺🇸 英文网", buyer: "用户 *K", time: "12分钟前", action: "已通过托管网关验证" },
+        { channel: "🇩🇪 德文网", buyer: "用户 *M", time: "18分钟前", action: "系统自动完成订单解耦" },
+        { channel: "🇰🇷 韩文网", buyer: "用户 *S", time: "25分钟前", action: "已完成只读数据备案" },
+        { channel: "🇪🇸 西文网", buyer: "用户 *L", time: "40分钟前", action: "订单通过云端审计核验" }
+    ];
+
+    let currentOrderIndex = 0;
+
+    // 全自动轮播广播调度器逻辑
+    function startNotificationCarousel() {
+        const toast = document.getElementById('order-toast');
+        const content = document.getElementById('toast-content');
+
+        setInterval(() => {
+            // 1. 隐去当前通知
+            toast.classList.remove('show');
+
+            // 2. 等待过渡动画完成后，切换数据并重新拉出弹窗
+            setTimeout(() => {
+                const currentData = mockRecentOrders[currentOrderIndex];
+                content.innerHTML = `[${currentData.channel}] <b>${currentData.buyer}</b> 在 <b>${currentData.time}</b> ${currentData.action}`;
+                toast.classList.add('show');
+                
+                // 指针循环递增
+                currentOrderIndex = (currentOrderIndex + 1) % mockRecentOrders.length;
+            }, 600); // 对齐 CSS 动画时间
+
+        }, 5000); // 每隔 5 秒全自动轮播一次
+    }
+
+    function triggerDemoPurchase() {
+        alert("🎉 触发标准合规下单模拟，系统未收集任何隐私资产凭证。");
+    }
+
+    // 网页加载完成后自动开始轮播驱动
+    window.onload = function() {
+        // 初始首次展示
+        const currentData = mockRecentOrders[0];
+        document.getElementById('toast-content').innerHTML = `[${currentData.channel}] <b>${currentData.buyer}</b> 在 <b>${currentData.time}</b> ${currentData.action}`;
+        document.getElementById('order-toast').classList.add('show');
         
-        <form onsubmit="submitToDatabase(event)">
-            <label>买家结算结算备注签名</label>
-            <input type="text" id="buyer-name" placeholder="请输入用于入库对照的测试签名（例如：张三）" required>
-            <label>合规安全清算渠道方式</label>
-            <select id="pay-method">
-                <option value="Standard Gateway">💳 模拟合规三方清算网关托管托管流</option>
-                <option value="Decoupled Web3">🪙 模拟去隐私链上智能结算流水</option>
-            </select>
-            <button type="submit" class="btn btn-success" id="submit-btn">向 Cloudflare D1 关系型数据库写入记录</button>
-        </form>
-        <button class="btn" style="background:none; color:#9ca3af; text-decoration:underline; margin-top:15px;" onclick="switchView('view-market')">← 放弃购买并返回前台</button>
-    </div>
+        currentOrderIndex = 1;
+        // 激活循环调度
+        startNotificationCarousel();
+    };
+</script>
 
-    <!-- 📊 视图三：D1 SQL 中央数据看板仪表盘 -->
-    <div id="view-admin" class="view-section">
-        <h2 style="color: #fff; margin-top:0;">D1 Serverless SQL 全球流水仪表盘</h2>
-        
-        <div id="login-module">
-            <p style="color: #9ca3af; font-size: 13px;">请输入 Cloudflare 环境绑定的高级系统密钥：</p>
-            <input type="password" id="admin-pass" value="admin_test_123" placeholder="输入控制台安全校验密钥...">
-            <button class="btn" onclick="syncD1Data()">建立安全 SQL 数据同步</button>
-        </div>
-
-        <div id="status-bar"></div>
-
-        <div id="data-module" style="display: none;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-                <span style="color:#10b981; font-size:13px; font-weight: 500;">● 边缘云关系型 D1 引擎已就绪 | 数据结构自动托管就绪</span>
-                <button class="btn" style="width:auto; padding:8px 15px;" onclick="syncD1Data()">🔄 强行同步 SQL</button>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>编号</th>
-                        <th>来源渠道</th>
-                        <th>写入时间 (D1 SQL引擎)</th>
-                        <th>目标商户/金额</th>
-                        <th>结算清算模式</th>
-                        <th>系统买家签名备注</th>
-                        <th>云审计核验</th>
-                    </tr>
-                </thead>
-                <tbody id="tbody"></tbody>
-            </table>
-        </div>
-        <button class="btn" style="background:none; color:#9ca3af; text-decoration:underline; margin-top:20px;" onclick="switchView('view-market')">← 返回前台市场</button>
-    </div>
-
-    <script>
-        let currentSeller = ""; let currentPrice = "";
-        function switchView(id) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
-            document.getElementById(id).classList.add('active-view');
-            document.getElementById('status-bar').style.display = "none";
-        }
-        function openCheckout(seller, price) {
-            currentSeller = seller; currentPrice = price;
-            document.getElementById('checkout-title').textContent = `向 ${seller} 提交订购确认`;
-            document.getElementById('checkout-price').textContent = `${price} USD`;
-            switchView('view-checkout');
-        }
-
-        // 发起请求分支 1：向边缘 D1 SQL 引擎安全新增一行数据
-        async function submitToDatabase(e) {
-            e.preventDefault();
-            const subBtn = document.getElementById('submit-btn');
-            subBtn.disabled = true;
-            
-            const payload = {
-                action: "write",
-                name: document.getElementById('buyer-name').value,
-                method: document.getElementById('pay-method').value,
-                seller: currentSeller,
-                price: parseFloat(currentPrice)
-            };
-            try {
-                const res = await fetch('/api', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await res.json();
-                if(result.success) {
-                    alert(`🎉 写入D1成功！\n数据库成功在底层追加了 1 行记录。\n分配生成的唯一流水ID: ${result.id}`);
-                    document.getElementById('buyer-name').value = "";
-                    switchView('view-market');
-                } else { alert("❌ D1引擎异常拒绝: " + result.message); }
-            } catch(err) { alert("网络传输或绑定未就绪: " + err.message); }
-            subBtn.disabled = false;
-        }
-
-        // 发起请求分支 2：向边缘集群下发高度编译优化的只读索引查询
-        async function syncD1Data() {
-            const pass = document.getElementById('admin-pass').value;
-            const statusBar = document.getElementById('status-bar');
-            const tbody = document.getElementById('tbody');
-            
-            statusBar.style.display = "block";
-            statusBar.className = "info";
-            statusBar.textContent = "正在穿透安全边缘集群对远程 D1 SQL 数据资产执行高效索引调取...";
-
-            try {
-                const res = await fetch('/api', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: "read", password: pass })
-                });
-                const result = await res.json();
-                
-                if (!res.ok || !result.success) {
-                    statusBar.className = "error";
-                    statusBar.innerHTML = "❌ 远程存储节点抛出异常: " + (result.message || "鉴权遭到拒绝");
-                    return;
-                }
-                
-                statusBar.style.display = "none";
-                document.getElementById('login-module').style.display = "none";
-                document.getElementById('data-module').style.display = "block";
-                tbody.innerHTML = '';
-                
-                if(result.data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#6b7280; padding:40px; font-weight:500;">⚠️ 关系型数据库已存在表，但当前内容真空。<br><small style="color: #4b5563;">请先去前台市场完成下单测试写入记录。</small></td></tr>`;
-                    return;
-                }
-                
-                result.data.forEach((row, idx) => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td><b style="color:#4b5563;">${idx + 1}</b></td>
-                        <td><span style="background:#222; padding:4px 8px; border-radius:4px; font-size:12px; border:1px solid #2d2d34;">${row.channel}</span></td>
-                        <td style="font-family:monospace; color:#9ca3af; font-size:13px;">${row.timestamp}</td>
+</body>
+</html>
