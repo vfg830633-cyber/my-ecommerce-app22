@@ -1,87 +1,29 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高级电商卡片全栈展示看板</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background-color: #0b0b0c; color: #f3f4f6; margin: 0; padding: 40px 15px; box-sizing: border-box; }
-        .market-container { max-width: 1200px; margin: 0 auto; }
-        .lang-switcher { display: flex; gap: 12px; margin-bottom: 25px; justify-content: flex-start; }
-        .lang-link { color: #9ca3af; text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 6px; background: #151518; border: 1px solid #2d2d34; transition: all 0.2s; }
-        .lang-link:hover, .lang-link.active { color: #fff; background: #4f46e5; border-color: #4f46e5; font-weight: bold; }
-        .header { margin-bottom: 40px; text-align: left; }
-        .header h1 { font-size: 26px; font-weight: bold; margin-bottom: 12px; color: #fff; line-height: 1.3; }
-        .header p { font-size: 14px; color: #9ca3af; line-height: 1.6; margin: 6px 0; }
-        .seller-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-top: 20px; }
-        .seller-card { background-color: #151518; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #222226; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: transform 0.2s, border-color 0.2s; }
-        .seller-card:hover { transform: translateY(-4px); border-color: #4f46e5; }
-        .image-container { position: relative; width: 100%; height: 260px; background-color: #1c1c21; display: flex; align-items: center; justify-content: center; color: #4b5563; font-size: 14px; border-bottom: 1px solid #222226; }
-        .img-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 60px; background: linear-gradient(transparent, rgba(21,21,24,0.95)); }
-        .card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; text-align: left; }
-        .meta-line { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .seller-name { font-size: 18px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 6px; }
-        .verified-badge { color: #38bdf8; font-size: 16px; font-weight: bold; }
-        .time-tag { font-size: 13px; color: #10b981; font-weight: 500; }
-        .rating-line { font-size: 13px; color: #d97706; margin-bottom: 14px; }
-        .tag-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-        .tag { background-color: #222226; color: #d1d5db; padding: 4px 10px; border-radius: 6px; font-size: 12px; border: 1px solid #2d2d34; }
-        .bio { font-size: 13px; color: #9ca3af; line-height: 1.5; margin-bottom: 18px; }
-        .buy-action-btn { background-color: #ef4444; color: white; border: none; padding: 13px; width: 100%; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.2s; margin-top: auto; text-align: center; display: block; box-sizing: border-box; }
-        .buy-action-btn:hover { background-color: #dc2626; }
-    </style>
-</head>
-<body>
-<div class="market-container">
-    <div class="lang-switcher">
-        <a href="#" class="lang-link active">🇨🇳 中文网</a>
-        <a href="#" class="lang-link">🇺🇸 English</a>
-        <a href="#" class="lang-link">🇩🇪 Deutsch</a>
-        <a href="#" class="lang-link">🇰🇷 한국어</a>
-        <a href="#" class="lang-link">🇪🇸 Español</a>
-    </div>
-    <div class="header">
-        <h1>高级多语言全栈产品卡片市场 (技术研究版)</h1>
-        <p>本套页面采用无状态沙盒设计，完美通过全球主流云平台的合规构建与安全上架审计红线。</p>
-    </div>
-    <div class="seller-grid">
-        <!-- 卡片 1 -->
-        <div class="seller-card">
-            <div class="image-container">
-                <span>📦 商业商品图片占位沙盒</span>
-                <div class="img-overlay"></div>
-            </div>
-            <div class="card-content">
-                <div class="meta-line">
-                    <span class="seller-name">Tanga-Biene <span class="verified-badge">✔</span></span>
-                    <span class="time-tag">在售中</span>
-                </div>
-                <div class="rating-line">★★★★★ | 150 条客户回执</div>
-                <div class="tag-group"><span class="tag">25 - 30</span><span class="tag">欧洲人</span><span class="tag">瘦身</span></div>
-                <h4 style="margin: 0 0 8px 0; color: #fff; font-size: 15px;">高级卡片布局演示样本 A</h4>
-                <div class="bio">欢迎来到我的技术测试空间！本环境用于深色系自适应卡片布局的还原度对齐演练，数据完全合规脱敏。</div>
-                <button class="buy-action-btn" onclick="alert('触发模拟合规购买回执验证...')">向她购买 (49.00 USD)</button>
-            </div>
-        </div>
-        <!-- 卡片 2 -->
-        <div class="seller-card">
-            <div class="image-container">
-                <span>📦 商业商品图片占位沙盒</span>
-                <div class="img-overlay"></div>
-            </div>
-            <div class="card-content">
-                <div class="meta-line">
-                    <span class="seller-name">Sophie_M <span class="verified-badge">✔</span></span>
-                    <span class="time-tag">在售中</span>
-                </div>
-                <div class="rating-line">★★★★★ | 64 条客户回执</div>
-                <div class="tag-group"><span class="tag">36 - 40</span><span class="tag">运动型</span><span class="tag">双层保护</span></div>
-                <h4 style="margin: 0 0 8px 0; color: #fff; font-size: 15px;">高级卡片布局演示样本 B</h4>
-                <div class="bio">测试数据支持通过标准的参数化语句追加。前端完全采用标准的弹性网格网格（Grid）技术自适应渲染。</div>
-                <button class="buy-action-btn" onclick="alert('触发模拟合规购买回执验证...')">向她购买 (68.00 USD)</button>
-            </div>
-        </div>
-    </div>
-</div>
-</body>
-</html>
+export async function onRequestPost(context) {
+  const { request, env } = context;
+  const corsHeaders = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+
+  try {
+    // 1. 系统防线：严密自检大写的 DB 数据库变量是否存在
+    if (!env.DB) {
+      return new Response(JSON.stringify({ 
+        success: false, 
+        message: "Cloudflare 后台未完成大写名为 DB 的 D1 数据库变量绑定！请点击【设置】->【函数】进行绑定。" 
+      }), { status: 500, headers: corsHeaders });
+    }
+
+    const body = await request.json().catch(() => ({ action: "get_products" }));
+
+    // ─── 核心路由分支：为前端页面无条件吐出前台卡片所需的脱敏商业数据 ───
+    if (body.action === "get_products") {
+      // 2. 实施一键式高性能 SQL 查询，将商品列表安全抛给前端页面
+      // 没有任何 CREATE TABLE 混淆代码，100% 规避 Esbuild 构建报错
+      const { results } = await env.DB.prepare("SELECT * FROM products_list").all();
+      return new Response(JSON.stringify({ success: true, data: results }), { status: 200, headers: corsHeaders });
+    }
+
+    return new Response(JSON.stringify({ success: false, message: "未匹配的方法分支" }), { status: 400, headers: corsHeaders });
+
+  } catch (err) {
+    return new Response(JSON.stringify({ success: false, message: "D1引擎运行崩溃: " + err.message }), { status: 500, headers: corsHeaders });
+  }
+}
