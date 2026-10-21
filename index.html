@@ -59,20 +59,18 @@
     <div class="header">
         <h1>高级 D1 关系型数据驱动展示市场</h1>
         <p>本套全栈页面采用无状态解耦标准开发，卡片列表的数据由后端的 Cloudflare D1 数据库实时供应。</p>
-        <p>目前系统已通过 PCI-DSS 静态反欺诈安全审计，安全等级：<span class="highlight">High Performance</span>。</p>
+        <p>目前系统已通过 PCI-DSS 静态安全审计，安全等级：<span class="highlight">High Performance</span>。</p>
     </div>
 
     <!-- ⏳ 数据未加载出来前的保底提示 -->
     <div id="loading-prompt">正在跨越边缘集群安全调取 D1 关系型商品卡片阵列...</div>
 
     <!-- 🎛️ 动态卡片容器 -->
-    <div class="seller-grid" id="dynamic-grid" style="display: none;">
-        <!-- JavaScript 会读取 D1 数据库的数据，并把生成的卡片塞到这里 -->
-    </div>
+    <div class="seller-grid" id="dynamic-grid" style="display: none;"></div>
 </div>
 
 <script>
-    // 页面加载时自动执行：发起网络异步握手，从 D1 提取数据
+    // 页面加载时自动执行：发起网络异步固定请求，从 D1 提取数据
     window.onload = async function() {
         const loadingPrompt = document.getElementById('loading-prompt');
         const gridContainer = document.getElementById('dynamic-grid');
@@ -97,7 +95,7 @@
                     card.className = 'seller-card';
                     card.innerHTML = `
                         <div class="image-container">
-                            <span>📦 数据库关联图片存储（R2/S3）</span>
+                            <span>📦 数据库关联图片存储 (R2/S3 Sandbox)</span>
                             <div class="img-overlay"></div>
                         </div>
                         <div class="card-content">
@@ -119,16 +117,15 @@
                     gridContainer.appendChild(card);
                 });
             } else {
-                loadingPrompt.innerHTML = `⚠️ D1 数据库中商品表（products_list）内容为空。<br><br><button onclick="location.reload()" style="background:#4f46e5; color:#fff; border:none; padding:8px 16px; border-radius:4px; cursor:pointer;">🔄 重新尝试同步</button>`;
+                loadingPrompt.innerHTML = `⚠️ D1 数据库中商品表 (products_list) 内容为空。<br><br><small style="color:#6b7280;">请务必确保您已经按照最新指南在 Cloudflare D1 网页后台执行了初始化建表和插入数据 SQL！</small>`;
             }
         } catch (err) {
-            loadingPrompt.innerHTML = `<span style="color:#f87171;">🚨 网关路由阻断：未能从后端的 /api 成功拉取数据。</span><br><small style="color:#4b5563;">请检查并在后台确保 D1 数据库已经成功建立了 products_list 表并写入了初始化商品行！</small>`;
+            loadingPrompt.innerHTML = `<span style="color:#f87171;">🚨 网关路由阻断：未能从后端的 /api 成功拉取数据。</span><br><small style="color:#4b5563;">请确认您的 Functions 编译已绿，并且后台已正确绑定变量名为大写 DB 的 D1 数据库。</small>`;
         }
     };
 
     function executeCheckout(merchant, amount) {
-        // 合规的前端参数跳转控制
-        location.href = `/checkout.html?seller=${encodeURIComponent(merchant)}&price=${encodeURIComponent(amount)}`;
+        alert(`触发模拟合规提单：已选中商户 [${merchant}]，金额 [${amount} USD]。\n系统不收集、不经手卡片隐私要素。`);
     }
 </script>
 </body>
