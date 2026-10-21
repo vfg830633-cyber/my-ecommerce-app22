@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>分布式边缘全栈一体化验证系统</title>
+    <title>边缘全栈云数据库系统</title>
     <style>
-        body { font-family: sans-serif; background-color: #0b0b0c; color: #f3f4f6; padding: 30px 15px; margin: 0; }
-        .view-section { max-width: 1000px; margin: 0 auto; display: none; background: #151518; padding: 25px; border-radius: 12px; border: 1px solid #2d2d34; }
+        body { font-family: -apple-system, sans-serif; background-color: #0b0b0c; color: #f3f4f6; padding: 30px 15px; margin: 0; }
+        .view-section { max-width: 1000px; margin: 0 auto; display: none; background: #151518; padding: 25px; border-radius: 12px; border: 1px solid #2d2d34; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .active-view { display: block; }
         .grid { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
         .card { background-color: #0b0b0c; border-radius: 8px; padding: 20px; width: 260px; border: 1px solid #222226; }
@@ -19,71 +19,72 @@
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { padding: 12px; border-bottom: 1px solid #2d2d34; text-align: left; }
         th { background: #0b0b0c; color: #9ca3af; font-size: 12px; }
+        #status-bar { padding: 12px; border-radius: 6px; margin: 15px 0; font-size: 13px; display: none; }
+        .info { background: rgba(56,189,248,0.1); color: #38bdf8; border: 1px solid rgba(56,189,248,0.2); }
     </style>
 </head>
 <body>
 
-    <!-- 🛒 视图一：前端示范市场 -->
+    <!-- 🛒 VIEW 1: E-Commerce Product Showcase -->
     <div id="view-market" class="view-section active-view">
-        <h2 style="text-align: center; margin-top: 0;">Cloudflare 边缘全栈测试市场</h2>
-        <p style="text-align: center; color: #9ca3af; font-size: 13px;">本环境采用无状态自解耦技术，杜绝接触和采集任何敏感支付三要素。</p>
+        <h2 style="text-align: center; margin-top: 0;">Cloudflare Edge 全栈 SQL 示范市场</h2>
         <div class="grid">
             <div class="card">
-                <h3>测试商品 001</h3>
+                <h3>高级数据验证版 A</h3>
                 <div class="price">22.00 USD</div>
-                <button class="btn" onclick="openCheckout('商户Alpha', '22.00')">立即预订</button>
+                <button class="btn" onclick="openCheckout('商户Alpha', '22.00')">立即结算</button>
             </div>
             <div class="card">
-                <h3>测试商品 002</h3>
+                <h3>高性能存储版 B</h3>
                 <div class="price">25.00 USD</div>
-                <button class="btn" onclick="openCheckout('商户Beta', '25.00')">立即预订</button>
+                <button class="btn" onclick="openCheckout('商户Beta', '25.00')">立即结算</button>
             </div>
         </div>
         <div style="text-align: center; margin-top: 30px;">
-            <button class="btn" style="background:#222; width:auto; border:1px solid #333;" onclick="switchView('view-admin')">⚙️ 进入云清算控制台</button>
+            <button class="btn" style="background:#222; width:auto; border:1px solid #333;" onclick="switchView('view-admin')">⚙️ 进入中央 SQL 控制台</button>
         </div>
     </div>
 
-    <!-- 💳 视图二：独立合规收银台 -->
+    <!-- 💳 VIEW 2: Compliant Checkout Desk -->
     <div id="view-checkout" class="view-section">
-        <h3 id="checkout-title">独立清算收银台</h3>
+        <h3 id="checkout-title">独立收银结算端</h3>
         <div class="price" id="checkout-price">0.00 USD</div>
-        <form id="pay-form" onsubmit="submitOrder(event)">
-            <label>买家测试备注名</label>
-            <input type="text" id="buyer-name" placeholder="请输入您的盘点名称" required>
-            <label>安全清算合规渠道</label>
+        <form onsubmit="submitToDatabase(event)">
+            <label>买家结算标识名称</label>
+            <input type="text" id="buyer-name" placeholder="请输入本次入库备注签名" required>
+            <label>合规清算结算渠道</label>
             <select id="pay-method">
-                <option value="safe_card">💳 模拟合规三方网关托管代币结算</option>
-                <option value="safe_crypto">🪙 模拟链上安全清算去隐私流</option>
+                <option value="Standard Gateway">💳 模拟合规三方清算网关托管托管流</option>
+                <option value="Decoupled Web3">🪙 模拟去隐私链上智能结算流水</option>
             </select>
-            <button type="submit" class="btn btn-success">确认安全加密存入</button>
+            <button type="submit" class="btn btn-success">向 Cloudflare D1 数据库写入记录</button>
         </form>
-        <button class="btn" style="background:none; color:#9ca3af; text-decoration:underline; margin-top:15px;" onclick="switchView('view-market')">← 放弃并返回</button>
+        <button class="btn" style="background:none; color:#9ca3af; text-decoration:underline; margin-top:15px;" onclick="switchView('view-market')">← 放弃购买并返回</button>
     </div>
 
-    <!-- 📊 视图三：中央管理控制台 -->
+    <!-- 📊 VIEW 3: D1 SQL Central Controller Dashboard -->
     <div id="view-admin" class="view-section">
-        <h2>全球流水清算中央控制台</h2>
+        <h2>D1 Serverless SQL 全球流水仪表盘</h2>
         <div id="login-module">
-            <p style="color:#9ca3af; font-size:13px;">请输入 Cloudflare 环境绑定的高级安全密钥以建立边缘数据穿透：</p>
-            <input type="password" id="admin-pass" value="admin_test_123" placeholder="输入控制台口令...">
-            <button class="btn" onclick="syncCloudData()">建立安全同步</button>
+            <input type="password" id="admin-pass" value="admin_test_123" placeholder="输入控制台安全校验密钥...">
+            <button class="btn" onclick="syncD1Data()">建立安全 SQL 数据同步</button>
         </div>
+        <div id="status-bar" class="info"></div>
         <div id="data-module" style="display: none;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="color:#10b981; font-size:13px;">● 边缘云分布式节点连接就绪 | 实时商业流水已完成去隐私核验</span>
-                <button class="btn" style="width:auto; padding:8px 15px;" onclick="syncCloudData()">🔄 强行刷新</button>
+                <span style="color:#10b981; font-size:13px;">● 边缘云关系型 D1 引擎已就绪 | 数据读写已通过安全脱敏验证</span>
+                <button class="btn" style="width:auto; padding:8px 15px;" onclick="syncD1Data()">🔄 强行同步 SQL</button>
             </div>
             <table>
                 <thead>
                     <tr>
                         <th>编号</th>
                         <th>来源渠道</th>
-                        <th>系统时间 (北京)</th>
+                        <th>写入时间 (D1引擎)</th>
                         <th>目标商户/金额</th>
-                        <th>结算模式</th>
-                        <th>买家备注</th>
-                        <th>核验状态</th>
+                        <th>清算模式</th>
+                        <th>系统买家签名</th>
+                        <th>边缘审计</th>
                     </tr>
                 </thead>
                 <tbody id="tbody"></tbody>
@@ -92,80 +93,89 @@
         <button class="btn" style="background:none; color:#9ca3af; text-decoration:underline; margin-top:20px;" onclick="switchView('view-market')">← 返回前台市场</button>
     </div>
 
-    <!-- ⚠️ 纯前端多视图及 LocalStorage 离线保底逻辑驱动 -->
     <script>
-        let currentSeller = "";
-        let currentPrice = "";
-
-        function switchView(viewId) {
+        let currentSeller = ""; let currentPrice = "";
+        function switchView(id) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
-            document.getElementById(viewId).classList.add('active-view');
+            document.getElementById(id).classList.add('active-view');
+            document.getElementById('status-bar').style.display = "none";
         }
-
         function openCheckout(seller, price) {
-            currentSeller = seller;
-            currentPrice = price;
-            document.getElementById('checkout-title').textContent = `向 ${seller} 确认订购`;
+            currentSeller = seller; currentPrice = price;
+            document.getElementById('checkout-title').textContent = `确认订购至： ${seller}`;
             document.getElementById('checkout-price').textContent = `${price} USD`;
             switchView('view-checkout');
         }
 
-        function submitOrder(e) {
+        // POST Route 1: Writes data into the live D1 Relational DB
+        async function submitToDatabase(e) {
             e.preventDefault();
-            const name = document.getElementById('buyer-name').value;
-            const method = document.getElementById('pay-method').value;
-
-            // 建立高弹性本地数据缓存（解决由于 KV 未绑定或云节点异常导致的系统死机报错）
-            let localRecords = JSON.parse(localStorage.getItem('ecommerce_mock_kv')) || [];
-            localRecords.push({
-                timestamp: new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }),
-                channel: "🇨🇳 中文主路径",
+            const statusBar = document.getElementById('status-bar');
+            const payload = {
+                action: "write",
+                name: document.getElementById('buyer-name').value,
+                method: document.getElementById('pay-method').value,
                 seller: currentSeller,
-                price: parseFloat(currentPrice).toFixed(2),
-                method: method === "safe_card" ? "💳 托管代币" : "🪙 三方数字清算",
-                name: name
-            });
-            localStorage.setItem('ecommerce_mock_kv', JSON.stringify(localRecords));
-            
-            alert("🎉 订单登记成功！数据已进入隔离测试沙盒。");
-            document.getElementById('buyer-name').value = "";
-            switchView('view-market');
+                price: parseFloat(currentPrice)
+            };
+            try {
+                const res = await fetch('/api', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+                if(result.success) {
+                    alert("🎉 Cloudflare D1 关系型数据库底层写入成功！行ID: " + result.id);
+                    document.getElementById('buyer-name').value = "";
+                    switchView('view-market');
+                } else { alert("❌ D1引擎拒绝写入: " + result.message); }
+            } catch(err) { alert("网络异常/D1未绑定: " + err.message); }
         }
 
-        function syncCloudData() {
+        // POST Route 2: Queries high-performance indexed queries with ORDER BY
+        async function syncD1Data() {
             const pass = document.getElementById('admin-pass').value;
-            // 安全卡点：通过本地预设和云变量隔离对齐
-            if (!pass || pass !== "admin_test_123") {
-                alert("❌ 鉴权失败：控制台安全清算密钥错误，无权穿透边缘提取数据流。");
-                return;
-            }
-
-            document.getElementById('login-module').style.display = "none";
-            document.getElementById('data-module').style.display = "block";
-            
+            const statusBar = document.getElementById('status-bar');
             const tbody = document.getElementById('tbody');
-            tbody.innerHTML = '';
             
-            const records = JSON.parse(localStorage.getItem('ecommerce_mock_kv')) || [];
-            if (records.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#6b7280; padding:30px;">⚠️ 分布式云存储库空白。前台尚未提交过任何流水数据。</td></tr>`;
-                return;
-            }
+            statusBar.style.display = "block";
+            statusBar.textContent = "正在通过 Edge Web Crypto 网关对 D1 关系集群执行高性能查询...";
 
-            // 按照接收时间由新到旧在沙盒中完成高效排序
-            records.reverse().forEach((row, idx) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${idx + 1}</td>
-                    <td><span style="background:#222; padding:3px 6px; border-radius:4px; font-size:12px;">${row.channel}</span></td>
-                    <td style="font-family:monospace; color:#9ca3af; font-size:13px;">${row.timestamp}</td>
-                    <td><b>${row.seller}</b> <br> <small style="color:#ef4444;">$${row.price}</small></td>
-                    <td><small style="color:#9ca3af;">${row.method}</small></td>
-                    <td>${row.name}</td>
-                    <td style="color:#10b981; font-weight:500;">🟢 已完成去隐私合规核验</td>
-                `;
-                tbody.appendChild(tr);
-            });
+            try {
+                const res = await fetch('/api', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: "read", password: pass })
+                });
+                const result = await res.json();
+                if (!res.ok || !result.success) {
+                    statusBar.textContent = "❌ SQL集群异常: " + (result.message || "鉴权失败");
+                    return;
+                }
+                statusBar.style.display = "none";
+                document.getElementById('login-module').style.display = "none";
+                document.getElementById('data-module').style.display = "block";
+                tbody.innerHTML = '';
+                
+                if(result.data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#6b7280; padding:30px;">⚠️ D1 数据库当前处于真空状态，请先在前台进行提单测试。</td></tr>`;
+                    return;
+                }
+                result.data.forEach((row, idx) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${idx + 1}</td>
+                        <td><span style="background:#222; padding:3px 6px; border-radius:4px; font-size:12px;">${row.channel}</span></td>
+                        <td style="font-family:monospace; color:#9ca3af; font-size:13px;">${row.timestamp}</td>
+                        <td><b>${row.seller}</b> <br> <small style="color:#ef4444;">$${row.price.toFixed(2)}</small></td>
+                        <td><small style="color:#9ca3af;">${row.method}</small></td>
+                        <td>${row.buyer_name}</td>
+                        <td style="color:#10b981; font-weight:500;">🟢 D1 安全只读审计完成</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch(err) { statusBar.textContent = "阻断：未能正常连通后端 API 处理引擎。原因: " + err.message; }
         }
     </script>
 </body>
